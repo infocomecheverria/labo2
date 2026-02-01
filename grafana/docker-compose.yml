@@ -10,8 +10,13 @@ services:
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/
       - TZ=${TZ}
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./provisioning/:/etc/grafana/provisioning/
+    
+      # - /opt/stacks/labo2/grafana/data:/var/lib/grafana
+      # si querés auto-provisionar el datasource:
+      - /opt/stacks/labo2/grafana/provisioning:/etc/grafana/provisioning:ro
+
+     # - grafana_data:/var/lib/grafana
+     # - ./provisioning/:/etc/grafana/provisioning/
     ports:
       - "3000:3000"
     networks:
