@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /sys:/sys:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    environment:
+      - TZ=${TZ}
+    networks:
+      - mon_net
+    restart: unless-stopped
+
+networks:
+  mon_net:
+    external: true

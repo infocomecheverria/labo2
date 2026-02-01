@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox
+    command: ["--config.file=/etc/blackbox_exporter/blackbox.yml"]
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/blackbox.yml:ro
+    ports:
+      - "9115:9115"
+    environment:
+      - TZ=${TZ}
+    networks:
+      - mon_net
+    restart: unless-stopped
+
+networks:
+  mon_net:
+    external: true

@@ -1,0 +1,11 @@
+groups:
+  - name: basic.rules
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Instancia caída: {{ $labels.instance }}"
+          description: "El target {{ $labels.job }} ({{ $labels.instance }}) no responde desde hace 2m."
