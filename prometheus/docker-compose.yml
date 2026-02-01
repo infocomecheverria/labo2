@@ -1,27 +1,30 @@
 version: "3.9"
+
 services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
     user: "root"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-      # - ./files/:/etc/prometheus/files/:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
       - "--web.enable-lifecycle"
+      # - "--storage.tsdb.retention.time=15d"   # opcional
+      # - "--log.level=info"
     ports:
       - "9090:9090"
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-America/Argentina/Buenos_Aires}
     networks:
       - mon_net
     restart: unless-stopped
-
-volumes:
-  prometheus_data:
+    volumes:
+      # 👉 archivo de config en el host (¡absoluto!)
+      - /opt/stacks/labo2/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      # 👉 datos persistentes (en el host o volumen nombrado)
+      - /opt/stacks/labo2/prometheus/data:/prometheus
+      # 👉 si usás archivos extras
+      # - /opt/stacks/labo2/prometheus/files:/etc/prometheus/files:ro
 
 networks:
   mon_net:
